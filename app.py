@@ -1,8 +1,20 @@
 from io import StringIO
-
+import os
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import dash_auth
+from dotenv import load_dotenv
+
+load_dotenv()
+
+USERNAME = os.getenv("SFE_USERNAME")
+PASSWORD = os.getenv("SFE_PASSWORD")
+
+if not USERNAME or not PASSWORD:
+    raise RuntimeError(
+        "SFE_USERNAME and SFE_PASSWORD must be configured."
+    )
 
 from dash import (
     Dash,
@@ -37,7 +49,12 @@ app = Dash(
 
 server = app.server
 
-
+auth = dash_auth.BasicAuth(
+    app,
+    {
+        USERNAME: PASSWORD
+    }
+)
 # ---------------------------------------------------------
 # COLOURS
 # ---------------------------------------------------------
